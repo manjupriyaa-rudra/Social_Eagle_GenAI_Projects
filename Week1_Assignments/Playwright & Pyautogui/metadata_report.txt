@@ -1,0 +1,20 @@
+WEB PAGE RESEARCH REPORT
+=========================
+
+URL: https://www.bbc.com/news/technology
+Extraction Time: 2026-01-25 19:20:16
+
+METADATA
+--------
+Title: BBC Innovation | Technology, Health, Environment, AI
+Description: BBC Innovation brings you the latest in Technology news and coverage from around the world, including health, environment, AI, and more
+Keywords: Keywords not found
+
+CONTENT DATA
+------------
+Main Heading: Innovation
+
+First Paragraph:
+Chinese AI models are racing ahead of their American rivals as US firms big and small turn to cheaper, faster alternatives.
+
+Total Links on Page: 153

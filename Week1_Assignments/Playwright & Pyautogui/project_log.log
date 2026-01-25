@@ -1,0 +1,19 @@
+2026-01-25 19:18:59,126 - INFO - 
+==================================================
+2026-01-25 19:18:59,127 - INFO - NEW EXECUTION STARTED - 2026-01-25 19:18:59
+2026-01-25 19:18:59,127 - INFO - ==================================================
+
+2026-01-25 19:18:59,127 - INFO - Program started
+2026-01-25 19:19:00,886 - INFO - Launching browser
+2026-01-25 19:19:02,829 - INFO - Opening website: https://www.bbc.com/news/technology
+2026-01-25 19:19:15,562 - INFO - Page loaded successfully
+2026-01-25 19:19:15,618 - INFO - Page title extracted
+2026-01-25 19:19:15,697 - INFO - Meta description extracted
+2026-01-25 19:20:15,720 - INFO - Meta keywords extracted
+2026-01-25 19:20:15,726 - INFO - Main heading extracted
+2026-01-25 19:20:16,112 - INFO - First paragraph extracted
+2026-01-25 19:20:16,117 - INFO - Links count extracted
+2026-01-25 19:20:16,120 - INFO - Writing data to text file
+2026-01-25 19:20:16,121 - INFO - Data successfully saved to metadata_report.txt
+2026-01-25 19:20:24,075 - INFO - Browser closed
+2026-01-25 19:20:24,114 - INFO - Program finished successfully
