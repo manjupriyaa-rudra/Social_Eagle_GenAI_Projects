@@ -1,0 +1,28 @@
+2026-01-26 23:51:25,514 - INFO - 
+==================================================
+2026-01-26 23:51:25,515 - INFO - NEW EXECUTION STARTED - 2026-01-26 23:51:25
+2026-01-26 23:51:25,515 - INFO - ==================================================
+
+2026-01-26 23:51:25,515 - INFO - Flask Program started
+2026-01-26 23:51:25,569 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-01-26 23:51:25,569 - INFO - [33mPress CTRL+C to quit[0m
+2026-01-26 23:51:25,571 - INFO -  * Restarting with stat
+2026-01-26 23:51:25,933 - INFO - 
+==================================================
+2026-01-26 23:51:25,933 - INFO - NEW EXECUTION STARTED - 2026-01-26 23:51:25
+2026-01-26 23:51:25,935 - INFO - ==================================================
+
+2026-01-26 23:51:25,935 - INFO - Flask Program started
+2026-01-26 23:51:25,949 - WARNING -  * Debugger is active!
+2026-01-26 23:51:25,953 - INFO -  * Debugger PIN: 145-786-422
+2026-01-26 23:52:13,571 - INFO - Launching browser
+2026-01-26 23:52:14,849 - INFO - Opening website: https://www.bbc.com/news/technology
+2026-01-26 23:52:21,415 - INFO - Page loaded successfully
+2026-01-26 23:53:22,821 - INFO - Browser closed
+2026-01-26 23:53:22,871 - INFO - 127.0.0.1 - - [26/Jan/2026 23:53:22] "GET /extract HTTP/1.1" 200 -
+2026-01-26 23:54:48,070 - INFO - Launching browser
+2026-01-26 23:54:48,311 - INFO - Opening website: https://www.bbc.com/news/technology
+2026-01-26 23:54:52,155 - INFO - Page loaded successfully
+2026-01-26 23:55:52,348 - INFO - Browser closed
+2026-01-26 23:55:52,359 - INFO - 127.0.0.1 - - [26/Jan/2026 23:55:52] "GET /extract HTTP/1.1" 200 -
