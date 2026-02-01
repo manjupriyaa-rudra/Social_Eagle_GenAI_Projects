@@ -1,0 +1,71 @@
+# ------------------------------------------------------------------- #
+Reverse Prompting:
+# ------------------------------------------------------------------- #
+
+you are a expert in json prompting. 
+write me a json prompt for my usecase “Find 5 Python developer jobs in Chennai from a job portal and summarize them.
+
+# ------------------------------------------------------------------- #
+The Actual JSON Prompt
+# ------------------------------------------------------------------- #
+{
+  "role": "AI Agent",
+  "objective": "Find 5 Python developer jobs in Chennai and provide a short summary for each job",
+  "tool_call": {
+    "tool_name": "browser_agent",
+    "action": "search_and_extract",
+    "input": {
+      "search_query": "Python developer jobs in Chennai site:naukri.com OR site:indeed.com",
+      "max_results": 5,
+      "fields_to_extract": [
+        "job_title",
+        "company_name",
+        "location",
+        "experience_required",
+        "job_description"
+      ]
+    }
+  },
+  "processing_instructions": {
+    "summarize_each_job_in": "2-3 lines",
+    "remove_duplicates": true,
+    "language": "simple_english"
+  },
+  "output_format": {
+    "type": "json",
+    "structure": [
+      {
+        "job_title": "",
+        "company_name": "",
+        "location": "",
+        "experience_required": "",
+        "summary": ""
+      }
+    ]
+  }
+}
+
+
+# ------------------------------------------------------------------- #
+JSON Response
+# ------------------------------------------------------------------- #
+
+USER INPUT: find me latest 2 python developer job in chennai
+
+
+[
+  {
+    "job_title": "Python Developer",
+    "company_name": "Infosys",
+    "location": "Chennai, Tamil Nadu",
+    "experience_required": "2-5 years",
+    "summary": "Work with a team on Python development projects. Requires good programming skills, web framework experience, and troubleshooting abilities."
+  },
+  {
+    "job_title": "Junior Python Developer",
+    "company_name": "Cognizant",
+    "location": "Chennai, Tamil Nadu",
+    "experience_required": "0-2 years",
+    "summary": "Entry-level role for freshers with basic Python knowledge. Assist senior developers and help write and test code."
+  }
+]

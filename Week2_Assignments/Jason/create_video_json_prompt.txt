@@ -1,0 +1,63 @@
+reverse prompting:-
+------------------
+
+you are a expert in json prompting. create a json prompt for the following scenes with multi characters, bright and colourfull lights.
+Scene 1: Dr. ABJ Abdul kalam entering through a massive door in to social eagle community meeting , where a banner should be visible. He is waving his hands and the people around stands up and greet him with a energitic claps.
+Scene 2: Dr. ABJ Abdul kalam is on the dice facing the people and quoting "Learning gives creativity, creativity leads to thinking, thinking provides knowledge, and knowledge makes you great"
+
+<chage the real chacracter to a futuristic robot as the tool is not supporting real time ppl >
+
+
+json promt:-
+-----------------
+
+{
+  "scenes": [
+    {
+      "scene_id": 1,
+      "description": "Chitti, a futuristic AI humanoid robot, entering through a massive ornate door into the Social Eagle community meeting. The door is grand and decorated. A banner reading 'Social Eagle Community' is visible in the background. Chitti is waving its mechanical hands gracefully. People around stand up and greet with energetic claps, looking amazed and excited. The scene is vibrant, lively, with bright and colorful lights, showing a futuristic yet celebratory atmosphere. Multiple characters are present, each reacting realistically.",
+      "characters": [
+        {
+          "name": "Chitti",
+          "pose": "waving mechanical hands, slightly glowing eyes, sleek metallic humanoid body",
+          "attire": "futuristic armor-like metallic suit"
+        },
+        {
+          "name": "Community members",
+          "pose": "standing, clapping, some smiling and some looking amazed",
+          "quantity": "multiple",
+          "attire": "casual and semi-formal"
+        }
+      ],
+      "environment": {
+        "setting": "indoor community hall",
+        "lighting": "bright, colorful, slightly futuristic neon accents",
+        "props": ["massive ornate door", "banner reading 'Social Eagle Community'"]
+      },
+      "mood": "celebratory, respectful, energetic, futuristic"
+    },
+    {
+      "scene_id": 2,
+      "description": "Chitti, the futuristic AI humanoid robot, standing on a dais, facing the audience. It is speaking and quoting: 'Learning gives creativity, creativity leads to thinking, thinking provides knowledge, and knowledge makes you great.' Audience members are attentively listening, some taking notes, some clapping. The lighting is bright, colorful, and futuristic, with neon reflections on Chitti's metallic body. Multiple characters are present, with focus on Chitti as the central figure.",
+      "characters": [
+        {
+          "name": "Chitti",
+          "pose": "standing on dais, gesturing with one mechanical hand while speaking, glowing eyes",
+          "attire": "futuristic armor-like metallic suit"
+        },
+        {
+          "name": "Audience",
+          "pose": "listening, clapping, some taking notes",
+          "quantity": "multiple",
+          "attire": "casual and semi-formal"
+        }
+      ],
+      "environment": {
+        "setting": "indoor community hall, dais in the center",
+        "lighting": "bright, colorful, futuristic neon reflections",
+        "props": ["dais", "microphone", "banner in background"]
+      },
+      "mood": "inspirational, engaging, futuristic, energetic"
+    }
+  ]
+}

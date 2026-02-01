@@ -1,0 +1,27 @@
+Reverse Prompt:
+---------------
+write a json prompt for generating a high quality realisti image of a smilling baby girl sitting on her mother lap 
+placing her wet hands around her mother's cheeks where few drops are falling from her hands to the lap of the mother. 
+Give some sparkaling light on the water drops. Face of the mother should be very charismatic. 
+For the babies image use given picture as reference and keep is close to realistic. 
+
+create a json prompt for creating an image of a beautiful baby with wide eyes in a futuristic world 
+but with colours in the background and in a paradise garden. keep it more creative.
+Baby should be smiling and be surprised
+use the image of the baby as reference.
+
+
+JSON Prompt:
+---------------
+
+{
+  "prompt": "A beautiful baby with wide, sparkling eyes, sitting in a futuristic paradise garden bursting with vibrant, colorful flora and glowing plants. Magical floating lights, shimmering butterflies, and gentle streams of luminescent water surround the baby. The garden blends futuristic architecture with fantastical natural elements, creating a dreamy, surreal atmosphere. Ultra-realistic, cinematic composition, soft natural lighting highlighting the baby's skin and expressive eyes, intricate details on clothing, flowers, and glowing environment. Emphasis on wonder, innocence, and magical realism. Colors are vivid, saturated, and enchanting, with a dreamy, whimsical glow.",
+  "negative_prompt": "cartoon, drawing, illustration, low quality, blurry, distorted, unrealistic proportions, extra limbs, poor lighting, dull or muted colors, flat composition",
+  "style": "photorealistic",
+  "quality": "ultra",
+  "camera": "DSLR style",
+  "lighting": "soft natural with magical glow",
+  "composition": "cinematic, fantasy",
+  "reference_image": "path_or_url_to_baby_reference_photo",
+  "resolution": "8k"
+}
