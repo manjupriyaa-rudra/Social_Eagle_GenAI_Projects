@@ -1,0 +1,98 @@
+🎬 1-Minute Anime Biriyani Storyboard with transition
+
+🎬 OPENING SCENE - 1 : PROMPT — MORNING BEGINS
+-----------------------------------------------
+Here is how the scene unfolds.
+Early morning sunrise over a semi-urban South Indian neighborhood, viewed from a top-angle aerial perspective. Modest houses with tiled roofs, small trees, narrow streets, and quiet courtyards create a peaceful family setting. Golden sun rays spread across rooftops as soft mist lingers in the air.
+Birds fly gently across the frame while a few birds perch and chirp on electric wires. Camera remains smooth and slow, slightly drifting forward from above.
+Lighting is very warm and shiny sunrise sunlight, soft shadows, natural glow. Emotional tone is calm, hopeful, and comforting — the feeling of a new day beginning for a normal family.
+Style is cinematic anime realism with subtle film grain, high detail, soft atmospheric haze, shallow depth of field in distant background, clean composition.
+Aspect ratio 16:9.
+Pacing is slow and premium.
+Constraints: no people visible, no vehicles moving, no modern high-rise buildings, no clutter, no neon colors, no dramatic clouds.
+End the shot with sunlight filling the frame, preparing for smooth transition into kitchen scene.
+
+🪔 SCENE 2 (0–8s) — Morning Begins (Discovery + Warmth)
+--------------------------------------------------------
+VIDEO PROMPT
+Intent: Storytelling, emotion
+Context: Quiet traditional South Indian home kitchen, early morning
+Subject: Young South Indian father standing near stove, calm smile
+Camera: Eye-level medium shot, slow push-in, smooth cinematic motion
+Time: Continuous motion
+Lighting: Soft warm sunrise light through window
+Emotion: Calm, intimacy
+Pacing: Slow, premium
+Realism: Cinematic-real
+Constraints: No clutter, no exaggerated effects, no extra people
+SCALE Embedded
+Subject: Father in cotton shirt
+Composition: Medium eye-level push-in
+Action: Steam rising from pot
+Location: Traditional kitchen
+Style: Cinematic anime realism
+Prompt:
+Here is how the scene unfolds. A young South Indian father wearing a simple cotton shirt stands near a traditional kitchen stove. Eye-level medium shot with slow cinematic push-in. Gentle steam rises from a boiling pot as warm morning sunlight enters through window grills. Traditional South Indian kitchen with brass vessels. Continuous smooth motion. Emotional tone calm and intimate. Cinematic anime realism, warm lighting, shallow depth of field, ultra detailed, 16:9.
+Transition: soft cross-fade into next scene.
+
+🔪 SCENE 3 (8–18s) — Ingredients of Love
+________________________________________
+Intent: Storytelling
+Context: Wooden kitchen counter
+Subject: Hands preparing biriyani ingredients
+Camera: Top-down close shot, slow lateral slide
+Time: Continuous
+Lighting: Warm indoor natural light
+Emotion: Care, nostalgia
+Pacing: Slow
+Prompt:
+Here is how the scene unfolds. Top-down close shot of hands chopping onions, tomatoes, mint leaves, spices neatly arranged. Slow lateral camera slide. Knife moves gently, spices sprinkled carefully. Wooden South Indian kitchen counter. Warm natural lighting. Emotional tone nostalgic and caring. Cinematic anime food realism, ultra detailed textures, 16:9.
+Transition: gentle blur dissolve.
+
+🔥 SCENE 4 (18–32s) — Cooking Passion
+________________________________________
+Intent: Emotion + Story
+Context: Home stove area
+Subject: Large biriyani pot being stirred
+Camera: Slight low-angle medium shot, slow circular movement
+Time: Continuous
+Lighting: Warm stove glow + ambient kitchen light
+Emotion: Passion
+Pacing: Medium-slow
+Prompt:
+Here is how the scene unfolds. Large aluminum biriyani pot on stove, father stirring rice and masala with wooden ladle. Medium shot from slight low angle with slow circular camera movement. Steam rises dramatically, flame flickers below pot. Home kitchen environment. Emotional tone passionate and heartfelt. Cinematic anime cooking realism, warm lighting, ultra detailed steam, 16:9.
+Transition: steam morphs into next frame.
+
+________________________________________
+❤️ SCENE 5 (52–60s) — Family Moment Ending
+Intent: Emotional storytelling
+Context: South Indian home dining room
+Subject: Smiling family ready to eat together
+Camera: Wide eye-level static shot
+Lighting: Soft warm ambient
+Emotion: Love, togetherness
+Pacing: Slow
+Prompt:
+Here is how the scene unfolds. South Indian family sitting together smiling, ready to eat biriyani. Wide eye-level static shot. Everyone looks at food happily, soft laughter. Traditional home dining room. Emotional tone love and togetherness. Cinematic anime realism, warm lighting, shallow depth of field, ultra detailed, 16:9.
+End on gentle fade to black.
+
+🎬 TITLE / END CARD — SCENE 6 - FINAL PROMPT
+________________________________________
+Here is how the scene unfolds.
+A premium advertisement end frame in 16:9 aspect ratio. Background is the same traditional South Indian kitchen setup as the reference image: clay stove with gentle glowing fire, brass vessels on wooden shelves, soft sunlight entering through window, warm cinematic ambience — no people present, empty kitchen, peaceful and minimal.
+Centered perfectly both horizontally and vertically appears the word “Biriyani” in bold, elegant gold typography — refined, authoritative, luxury mass-brand aesthetic. Generous negative space surrounds the title. Subtle vignette toward frame edges.
+Beneath it, in smaller balanced gold lettering, the subtitle fades in smoothly:
+“Every Sunday is not complete without Biriyani”
+A soft golden light sweep passes horizontally across the main “Biriyani” text, creating a gentle highlight (no glare). Subtle fire crackles from the clay stove in the background, barely visible, adding warmth without distraction.
+After a brief pause, a third line appears below with a soft fade-in and slight pop-out animation:
+“Today is very special we are completing it with a video for prompt battle”
+Background remains matte, cinematic, and uncluttered. Premium textile-inspired texture, soft film grain, high contrast, sharp crisp typography, no motion blur. Clean composition suitable for television and digital advertising.
+Emotional tone: warm, family-oriented, celebratory.
+Camera remains static.
+Lighting stays soft and golden throughout.
+End with gentle fade to black.
+Style: cinematic branding still, luxury mass appeal, ultra clean, ultra detailed.
+Constraints / Negative prompt:
+no characters, no people, no extra text, no watermark, no logos other than brand name, no clutter, no overpowering gradients, no neon glow.
+________________________________________
+
