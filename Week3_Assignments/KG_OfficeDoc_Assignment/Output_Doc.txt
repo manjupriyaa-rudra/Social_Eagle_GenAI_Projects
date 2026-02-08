@@ -1,0 +1,125 @@
+# -------------------------------------------------------------------------------------------
+# Output from KG RAG
+# -------------------------------------------------------------------------------------------
+
+Demo Menu
+================================================================================
+1. Run single question comparison
+2. Run full comparison suite (all demo questions)
+3. Visualize knowledge graph
+4. Interactive mode (ask your own questions)
+5. View graph statistics
+6. Exit
+
+Select an option [1/2/3/4/5/6]: 4
+
+Interactive Mode
+
+Ask questions about the CloudStore API (type 'exit' to quit)
+
+
+Your question: what does the cloud datastore will store in it?
+
+Comparing systems on question: what does the cloud datastore will store in it?
+
+Querying Traditional RAG...
+
+Querying Traditional RAG: what does the cloud datastore will store in it?
+Querying Knowledge Graph RAG...
+
+Querying Knowledge Graph: what does the cloud datastore will store in it?
+
+====================================================================================================
+COMPARISON RESULTS
+====================================================================================================
+
+Question: what does the cloud datastore will store in it?
+
+Traditional RAG Answer:
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Based on the provided context, the Cloud Datastore will store game data and states as part of its role in the architecture. This │
+│ includes information necessary for the operation of the mobile game, such as player progress, game settings, and possibly other  │
+│ dynamic content that needs to be persisted across game sessions.                                                                 │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Knowledge Graph RAG Answer:
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Based on the knowledge graph facts provided, the Cloud Datastore is used by the Mobile Game Backend as a highly-scalable NoSQL   │
+│ database for web and mobile applications. While the specific types of data stored in the Cloud Datastore are not detailed in the │
+│ facts given, we can infer from the context of its use in a mobile game backend that it could store a variety of data types       │
+│ relevant to mobile gaming applications. This may include:                                                                        │
+│                                                                                                                                  │
+│ 1. **Player Data**: Information about the players, such as profiles, game progress, scores, and achievements.                    │
+│ 2. **Game State Information**: Data representing the current state of a game session, which could be used to resume games or     │
+│ synchronize game state across devices.                                                                                           │
+│ 3. **Leaderboards**: Rankings of players based on their scores or achievements.                                                  │
+│ 4. **Game Configuration and Content**: Dynamic game content that can be updated without needing to update the game's software.   │
+│ This might include levels, assets, or event data.                                                                                │
+│ 5. **Transactional Data**: Records of in-game purchases or currency transactions.                                                │
+│ 6. **Session Logs**: Information about player sessions, which could be used for analytics or improving the gaming experience.    │
+│                                                                                                                                  │
+│ Given the scalability and flexibility of Cloud Datastore as a NoSQL database, it is well-suited to handle the diverse and        │
+│ potentially large-scale data needs of a mobile game backend. However, without more specific details from the knowledge graph     │
+│ facts, we can only hypothesize about the exact nature of the data stored based on typical use cases for mobile game backends.    │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                             Performance Metrics
+╭─────────────────────┬─────────────────┬─────────────────────┬──────────────╮
+│ Metric              │ Traditional RAG │ Knowledge Graph RAG │ Difference   │
+├─────────────────────┼─────────────────┼─────────────────────┼──────────────┤
+│ Query Time          │ 3.13s           │ 7.63s               │ RAG faster   │
+│ Retrieved Items     │ 2 chunks        │ 10 facts            │ +8           │
+│ Entities Identified │ N/A             │ 0                   │ KG advantage │
+│ Relationships Found │ N/A             │ 0                   │ KG advantage │
+╰─────────────────────┴─────────────────┴─────────────────────┴──────────────╯
+
+Key Insights:
+  ✓ KG retrieved 8 more relevant facts
+  ✓ KG provides structured, relationship-aware context
+  ✓ Traditional RAG provides chunk-based context
+
+# -------------------------------------------------------------------------------------------
+# Output from Chatgpt
+# -------------------------------------------------------------------------------------------
+
+https://chatgpt.com/share/69878db8-c954-800a-b5e2-5e59d3cf6e8a
+
+
+# -------------------------------------------------------------------------------------------
+# Verdict 
+# -------------------------------------------------------------------------------------------
+
+3️⃣ Final Verdict (Important)
+🏆 KG-RAG output is the BETTER answer for this use case
+
+Why?
+
+Because your goal here is KG-RAG correctness, not storytelling.
+
+The KG-RAG answer:
+
+Respects source-of-truth boundaries
+
+Signals inference vs fact
+
+Avoids cross-architecture contamination
+
+Behaves exactly like a well-tuned retrieval system should
+
+My answer is better as a teaching explanation,
+KG-RAG answer is better as a system-generated answer.
+
+# -------------------------------------------------------------------------------------------
+# Other outputs
+# -------------------------------------------------------------------------------------------
+
+G:\Social Eagle\Projects\KG_Assignment\knowledge-Graph-RAG\knowledge_graph.html
+G:\Social Eagle\Projects\KG_Assignment\knowledge-Graph-RAG\comparison_metrics.png
+
+# -------------------------------------------------------------------------------------------
+# converting diagram to txt
+# -------------------------------------------------------------------------------------------
+
+G:\Social Eagle\Projects\KG_Assignment\knowledge-Graph-RAG\diagram_to_txt.py
+G:\Social Eagle\Projects\KG_Assignment\knowledge-Graph-RAG\sample_data\arhitecture.txt
