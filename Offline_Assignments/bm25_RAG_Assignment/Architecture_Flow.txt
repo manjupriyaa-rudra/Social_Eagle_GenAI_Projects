@@ -1,0 +1,150 @@
+============================
+Project Architecture Diagram
+============================
+
+
+High-Level Flow
+----------------
+
+                ┌─────────────────────┐
+                │     User (Student)  │
+                │  Asks a Question    │
+                └─────────┬───────────┘
+                          │
+                          ▼
+                ┌─────────────────────┐
+                │   Streamlit Chat UI │
+                └─────────┬───────────┘
+                          │
+                          ▼
+                ┌─────────────────────┐
+                │   Query Processing  │
+                └─────────┬───────────┘
+                          │
+        ┌─────────────────┴─────────────────┐
+        ▼                                   ▼
+┌─────────────────┐               ┌─────────────────┐
+│  BM25 Retriever │               │ Vector Retriever│
+│ (Keyword Search)│               │   (FAISS Index) │
+└─────────┬───────┘               └─────────┬───────┘
+          │                                 │
+          └──────────────┬──────────────────┘
+                         ▼
+               ┌─────────────────────┐
+               │ Hybrid Rank & Merge │
+               │   (Top Chunks)      │
+               └─────────┬───────────┘
+                         │
+                         ▼
+               ┌─────────────────────┐
+               │     LLM (OpenAI)    │
+               │   Answer Generator  │
+               └─────────┬───────────┘
+                         │
+                         ▼
+               ┌─────────────────────┐
+               │  Response with Page │
+               │     References      │
+               └─────────┬───────────┘
+                         │
+                         ▼
+                ┌─────────────────────┐
+                │   Streamlit Chat UI │
+                │   Displays Answer   │
+                └─────────────────────┘
+
+==========================================
+Document Processing Flow (Indexing Stage)
+==========================================
+
+           ┌─────────────────────┐
+           │    Uploaded PDF     │
+           └─────────┬───────────┘
+                     ▼
+           ┌─────────────────────┐
+           │   PDF Loader        │
+           │ (PyPDFLoader)       │
+           └─────────┬───────────┘
+                     ▼
+           ┌─────────────────────┐
+           │   Text Chunking     │
+           │ (Recursive Splitter)│
+           └─────────┬───────────┘
+                     ▼
+        ┌────────────┴─────────────┐
+        ▼                          ▼
+┌─────────────────┐      ┌─────────────────┐
+│   BM25 Corpus   │      │ Embedding Model │
+│ (Tokenized text)│      │ (OpenAI)        │
+└─────────┬───────┘      └─────────┬───────┘
+          │                          ▼
+          │                ┌─────────────────┐
+          │                │   FAISS Index   │
+          │                │ (Local Storage) │
+          │                └─────────────────┘
+          ▼
+┌─────────────────┐
+│   BM25 Index    │
+│   (In Memory)   │
+└─────────────────┘
+
+
+Component Breakdown
+==================
+
+1. Frontend Layer
+=================
+        Streamlit Chat Interface
+        File uploader
+        Chat history display
+
+
+2. Retrieval Layer
+==================
+
+        1. BM25 Retriever
+        =================
+        Keyword-based search
+        Fast and precise for textbook questions
+
+        2. Vector Retriever (FAISS)
+        ===========================
+        Semantic search
+        Finds meaning-based matches
+
+        3. Hybrid Retriever
+        ===================
+        Combines BM25 + vector results
+        Removes duplicates
+        Sends best chunks to LLM
+
+3. Generation Layer
+===================
+        LLM (OpenAI)
+        Model: gpt-4o-mini
+        Uses RTCFR system prompt
+        Generates structured answer
+
+Storage
+========
+| Component     | Storage Type                |
+| ------------- | --------------------------- |
+| BM25 index    | RAM (temporary)             |
+| FAISS vectors | Local disk (`faiss_index/`) |
+| Chat history  | Streamlit session memory    |
+
+
+==========================
+Folder-Level Architecture
+==========================
+
+bm25_rag_chatbot/
+│
+├── app.py                → Main Streamlit app
+├── prompts.py            → System prompt
+├── requirements.txt      → Dependencies
+├── .env                  → API keys
+│
+└── faiss_index/          → Local vector store
+    ├── index.faiss
+    └── index.pkl

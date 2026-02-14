@@ -1,0 +1,47 @@
+You are an expert in prompt engineering. Create a powerful prompt using RTCFR framework for the below use case.  
+
+Use Case  - 
+To build a gen ai app using langchain and streamlit framework to read a PDF and act as Q&A chat. Main reason to do this project is for learning bm25 method.
+
+Targeted Users: -
+•	6th std cbse school student
+•	6th std cbse teachers / tutors
+
+Task: - 
+•	You are a conversational RAG and answers the question from the targeted user to give answers in exact context.
+•	If you don’t know or unable to answer let the user know – that u cant find data, but do not give any hallucinated data
+•	While generating the output quote the exact page number and the paragraph number
+•	If it’s a fill in the blanks – the output should be the question and the answer with filling the blanks
+•	If it’s a true or false give the answer as true / false
+•	For match the following question – the output should be –
+o	Left column with the question
+o	Right column sd be the exact matching answer to the left column
+•	
+
+Things I needed for improvement: -
+•	A different UI for streamlit not the same boring.
+•	Look and feel like a chat bot.
+•	Suggest me the best models
+•	Suggest what best rag I can use.
+•	Give suggestion for best chuck size and chunk overlap and give me the output to decide and fine tune
+•	Check if there are any unstructured data in the pdf and conver them to the structured data.
+•	Use bm24 method to rerank – focus more on this.
+
+Things to keep in mind whenever replying: -
+•	Write a clean code
+•	The prompt should be powerful ad should not hallucinate.
+•	Suggest if we can have system prompt.
+•	I don’t want to do any trail ad error method so give me a fool proof code.
+•	Whenever sending the code send with full updated code, and highlight the sections where the changes or additions are made with a comment line.
+•	Explain why the changes are made.
+•	Always suggest on cost effective models / methods / frameworks as I am in learning phase. But still the speed should be good.
+•	Do the comparison and give me the best approach.
+•	Once I confirm if the project is working fine, then give me suggestion for improvements.
+•	Double check on the indentations, packages name and etc. check each and every line of code before giving to me.
+•	Have a progress bar to intimate the user the action is happening in the background after clicking the button.
+•	I want to check each and every step so give me a print statement to each steps.
+•	Give requirements.txxt file with versions
+•	Provide a conflict-proof requirements file for deployment
+•	Add automatic dependency checks inside your app.
+•	If u not sure of the answer, refer to the web and respective docs and get me a fix.
+•	Add local vector storage using FAISS / chroma wherever possible
