@@ -1,0 +1,85 @@
+=========================================
+1. Overall Code Flow (High-Level Diagram)
+=========================================
+
+User launches Streamlit app
+        │
+        ▼
+app.py (UI + controller)
+        │
+        ├── Upload diagram
+        │
+        ▼
+utilities/vision_service.py
+(Image → Text extraction)
+        │
+        ▼
+pipeline/knowledge_graph.py
+(Ingest text into Knowledge Graph)
+        │
+        ▼
+pipeline/hybrid_retriever.py
+(Build hybrid search index)
+        │
+        ▼
+User asks question
+        │
+        ▼
+utilities/chat_service.py
+        │
+        ├── KG retrieval
+        ├── Hybrid retrieval
+        ├── Context merge
+        ├── LLM answer
+        │
+        ▼
+utilities/result_logger.py
+(Log results to JSON)
+        │
+        ▼
+Answer returned to app.py
+        │
+        ▼
+Displayed in Streamlit UI
+
+
+=========================================
+2. Folder Structure
+=========================================
+
+ARCH_KG_HYBRID/
+│
+├── app.py
+├── .env
+│
+├── config/
+│   ├── settings.py
+│   └── results/
+│
+├── documentation/│   
+│   ├── file_descriptions.txt
+│   ├── flow_diagram.txt
+│   └── README.md
+│
+├── llm_cache/
+│
+├── pipeline/
+│   ├── flow_builder.py
+│   ├── hybrid_retriever.py
+│   └── knowledge_graph.py
+│
+├── results/
+│   └── results_log.json
+│
+├── test_data/
+│   ├── bigquery_cloud_architecture.png
+│   └── question&answer.txt
+│
+├── utilities/
+│   ├── __init__.py
+│   ├── chat_service.py
+│   ├── result_logger.py
+│   └── vision_service.py
+│
+└── venv/
+

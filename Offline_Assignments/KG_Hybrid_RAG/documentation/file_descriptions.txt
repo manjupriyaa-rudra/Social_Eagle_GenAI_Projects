@@ -1,0 +1,195 @@
+3. File Responsibilities
+app.py
+
+Main entry point of the application.
+
+Handles:
+
+Streamlit UI
+
+Image upload
+
+Diagram processing
+
+Knowledge graph ingestion
+
+Hybrid retriever initialization
+
+Question input
+
+Answer display
+
+config/settings.py
+
+Central configuration file.
+
+Stores:
+
+Model name
+
+API keys
+
+Neo4j connection details
+
+Other environment settings
+
+pipeline/flow_builder.py
+
+Responsible for:
+
+Building structured architecture flow
+
+Converting extracted text into relationships
+
+Preparing data for KG ingestion
+
+pipeline/knowledge_graph.py
+
+Knowledge Graph engine.
+
+Handles:
+
+Graph creation
+
+Node and edge ingestion
+
+Querying relationships from Neo4j/Graphiti
+
+Main functions:
+
+ingest(text)
+query(question)
+
+pipeline/hybrid_retriever.py
+
+Hybrid search module.
+
+Handles:
+
+Vector retrieval
+
+Keyword retrieval
+
+Combined search results
+
+Main function:
+
+search(question)
+
+utilities/vision_service.py
+
+Diagram understanding module.
+
+Handles:
+
+Image input
+
+Vision model processing
+
+Extracts:
+
+Components
+
+Services
+
+Relationships
+
+Main function:
+
+image_to_text(image_path)
+
+utilities/chat_service.py
+
+Core orchestration logic.
+
+Handles:
+
+Receives question
+
+Queries Knowledge Graph
+
+Queries Hybrid retriever
+
+Combines context
+
+Sends to LLM
+
+Gets answer
+
+Logs results
+
+Main function:
+
+ask_question(question, kg, hybrid)
+
+utilities/result_logger.py
+
+Logging module.
+
+Stores:
+
+Question
+
+KG results
+
+Hybrid results
+
+LLM answer
+
+Source (KG or Hybrid)
+
+Output file:
+
+results/results_log.json
+
+results/results_log.json
+
+Stores all interaction logs.
+
+Example:
+
+{
+  "question": "Which service imports the Product Dataset into BigQuery?",
+  "kg_results": [
+    "Cloud Composer imports Product Dataset into BigQuery"
+  ],
+  "hybrid_results": [],
+  "llm_raw_answer": "Cloud Composer imports the Product Dataset into BigQuery.",
+  "source": "KG"
+}
+
+test_data/
+
+Contains:
+
+Sample architecture diagrams
+
+Sample Q&A for testing
+
+documentation/
+
+Contains project documentation:
+
+File	Purpose
+architecture_flow.txt	Overall system flow
+core_design	Core design notes
+file_description.txt	File-level explanations
+folder_structure.txt	Folder layout
+README.md	Main project documentation
+llm_cache/
+
+Stores:
+
+Cached LLM responses
+
+Reduces API calls and cost
+
+utilities/init.py
+
+Empty file used to:
+
+Mark folder as Python package
+
+Enable imports like:
+
+from utilities.chat_service import ask_question

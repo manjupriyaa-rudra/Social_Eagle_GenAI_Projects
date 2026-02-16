@@ -1,0 +1,231 @@
+----------------------------------------------------------------------------------------------------------------------------------                                              
+                                                Core Flow Questions (most important)
+----------------------------------------------------------------------------------------------------------------------------------
+
+=================================
+These test the main data pipeline.
+=================================
+
+1. 
+
+Question:
+Which system imports the Product Dataset into BigQuery?
+
+Expected Answer:
+Cloud Composer imports the Product Dataset into BigQuery.
+
+2
+
+Question:
+Where does the Product Dataset originate?
+
+Expected Answer:
+The Product Dataset originates from Cloud SQL.
+
+3
+
+Question:
+What happens after the Product Dataset is in BigQuery?
+
+Expected Answer:
+It is used to create the ML Project Dataset.
+
+4
+
+Question:
+Which service creates the ML Project Dataset?
+
+Expected Answer:
+Cloud Composer creates the ML Project Dataset.
+
+=======================================================
+ML Pipeline Questions - These test downstream ML usage
+=======================================================
+
+5
+
+Question:
+Which pipelines use the ML Project Dataset?
+
+Expected Answer:
+The Model Training Pipeline and Batch Predict Pipeline use the ML Project Dataset.
+
+6
+
+Question:
+Which platform runs the Model Training Pipeline?
+
+Expected Answer:
+Vertex Pipelines runs the Model Training Pipeline.
+
+7
+
+Question:
+Which platform runs the Batch Predict Pipeline?
+
+Expected Answer:
+Vertex Pipelines runs the Batch Predict Pipeline.
+
+================================================================================================
+Relationship Questions (KG accuracy tests) - These are important for checking graph correctness
+================================================================================================
+
+8
+
+Question:
+Which component sends data to the ML Project Dataset?
+
+Expected Answer:
+The Product Dataset in BigQuery sends data to the ML Project Dataset.
+
+9
+
+Question:
+What is the first cloud service that interacts with the Product Dataset?
+
+Expected Answer:
+Cloud Composer is the first cloud service that interacts with the Product Dataset.
+
+10
+
+Question:
+Which dataset is used for model training?
+
+Expected Answer:
+The ML Project Dataset is used for model training.
+
+================================================================================
+Cross-team Questions - These test whether the graph understands team boundaries.
+================================================================================
+
+11
+
+Question:
+Which team owns the Product Dataset?
+
+Expected Answer:
+The Product team owns the Product Dataset.
+
+12
+
+Question:
+Which team uses the ML Project Dataset?
+
+Expected Answer:
+The ML team uses the ML Project Dataset.
+
+==========================================================================================
+Logic/Reasoning Questions (Hybrid RAG tests) - These test reasoning, not just direct edges.
+==========================================================================================
+
+13
+
+Question:
+What is the full data flow from source to model training?
+
+Expected Answer:
+Cloud SQL → BigQuery Product Dataset → ML Project Dataset → Model Training Pipeline.
+
+14
+
+Question:
+What is the purpose of the ML Project Dataset?
+
+Expected Answer:
+It is used by the Model Training and Batch Predict pipelines for machine learning tasks.
+
+===============================================================================================
+Edge-case Questions (to test failure handling) - These ensure your system does not hallucinate
+===============================================================================================
+
+15
+
+Question:
+Does Cloud SQL directly send data to the ML Project Dataset?
+
+Expected Answer:
+No. Cloud SQL sends data to the BigQuery Product Dataset first.
+
+16
+
+Question:
+Does the Batch Predict Pipeline create datasets?
+
+Expected Answer:
+No. It uses the ML Project Dataset.
+
+
+==============================================================================
+Negative - Questions not within conext of the image - staying within the scope
+==============================================================================
+
+1
+
+Which component sends data to Dataflow?
+Expected KG answer:
+
+Pub/Sub
+
+2
+
+Which service sends data to Cloud Storage?
+Expected KG answer:
+
+Dataflow
+
+3
+
+Which component sends data to Datastore?
+Expected KG answer:
+
+---------------------------------------------------------------------------------------------------------------------------------
+                                                    KG-only validation questions
+---------------------------------------------------------------------------------------------------------------------------------
+
+============================
+Direct relationship checks
+============================
+
+Which service imports the Product Dataset into BigQuery?
+Expected KG answer: Cloud Composer
+
+Which dataset is created from the BigQuery Product Dataset?
+Expected: ML Project Dataset
+
+Which service sends data to the BigQuery Product Dataset?
+Expected: Cloud Composer
+
+Which service creates the ML Project Dataset?
+Expected: Cloud Composer
+
+============================
+Dataset flow questions
+============================
+
+Which dataset is the source for the ML Project Dataset?
+Expected: BigQuery Product Dataset
+
+What is the immediate source of the BigQuery Product Dataset?
+Expected: Cloud SQL Product Dataset
+
+============================
+Pipeline connection questions
+============================
+
+Which pipeline is connected to the ML Project Dataset?
+Expected: Model Training Pipeline
+
+Which pipeline performs batch predictions from the ML Project Dataset?
+Expected: Batch Predict Pipeline
+
+
+========================================================
+Team boundary questions (if teams were ingested as nodes)
+========================================================
+
+Which team owns the Cloud SQL Product Dataset?
+Expected: Product Team
+
+Which team uses the ML Project Dataset?
+Expected: ML Team
+
