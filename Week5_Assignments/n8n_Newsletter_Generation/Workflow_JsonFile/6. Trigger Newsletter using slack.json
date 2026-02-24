@@ -1,0 +1,172 @@
+{
+  "name": "6. Trigger Newsletter using slack",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Raw Slack text\nconst text = $json.text || \"\";\n\n// Remove Slack user mention\nlet cleaned = text.replace(/<@[^>]+>/g, \"\").trim();\n\n// Extract clean email\nconst emailMatch = text.match(/mailto:([^>|]+)/);\nconst email = emailMatch ? emailMatch[1].trim() : null;\n\ncleaned = cleaned.replace(/<mailto:[^>]+>/g, \"\").trim();\n\n// Split by |\nconst parts = cleaned.split(\"|\").map(p => p.trim());\n\n// Topic = first part\nconst topic = parts[0];\n\n// Platforms = second part (if exists)\nlet platforms = [];\n\nif (parts[1]) {\n  platforms = parts[1]\n    .split(\",\")\n    .map(p => p.trim().toLowerCase())\n    .filter(p => p);\n}\n\n// Safety fallback\nif (platforms.length === 0) {\n  platforms = [\"slack\"];\n}\n\nreturn {\n  topic,\n  language: \"English\",\n  tone: \"Professional\",\n  platforms,\n  email,\n  design_image_url: null\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        128
+      ],
+      "id": "b0b54f85-7028-4c0f-91e7-4c8e265a59bf",
+      "name": "Parse Slack Message"
+    },
+    {
+      "parameters": {
+        "trigger": [
+          "app_mention"
+        ],
+        "watchWorkspace": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.slackTrigger",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        128
+      ],
+      "id": "8e7e5f48-ad15-42d6-bc5f-2b3dd4e63d5d",
+      "name": "Slack Trigger",
+      "webhookId": "ae09be75-1428-46bf-a39b-d5ab5f1d2e64",
+      "credentials": {
+        "slackApi": {
+          "id": "QH82LHtqqzRooKx7",
+          "name": "Slack API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "kKG6QvmRV9f6AauB",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/kKG6QvmRV9f6AauB",
+          "cachedResultName": "Phase 4"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        272,
+        128
+      ],
+      "id": "2a0e5bd6-dfac-4ee8-bd5e-f064009f7935",
+      "name": "Newsletter - Generation and Sending"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "wUiwrjQ3iabG8U6G",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/wUiwrjQ3iabG8U6G",
+          "cachedResultName": "New Phase 2"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        128
+      ],
+      "id": "812ff9d7-9f08-4f2f-b902-a78ce0d1dae2",
+      "name": "Info Research & Filtering"
+    },
+    {
+      "parameters": {
+        "content": "## 🔁 MAIN ORCHESTRATOR\n\n* Triggered by Slack message.\n* Parses the request (topic, platforms, email),\n* Calls 2 sub-workflows in sequence:\n1. Info Research & Filtering\n2. Newsletter Generation & Sending",
+        "height": 224,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -416,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "9909169a-c01d-46de-9f9b-28caca4d5768",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Parse Slack Message": {
+      "main": [
+        [
+          {
+            "node": "Info Research & Filtering",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Trigger": {
+      "main": [
+        [
+          {
+            "node": "Parse Slack Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Newsletter - Generation and Sending": {
+      "main": [
+        []
+      ]
+    },
+    "Info Research & Filtering": {
+      "main": [
+        [
+          {
+            "node": "Newsletter - Generation and Sending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "cb78552f-a4bc-489f-8d95-00c9e7a7ce0a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2cca1bda785fe265cf4a5387ece9cc34e6ac47f8a1c228e1c2c08c333216aa4a"
+  },
+  "id": "wWo91dRo8Fc3dqT1",
+  "tags": []
+}
