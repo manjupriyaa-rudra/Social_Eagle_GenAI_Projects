@@ -1,0 +1,426 @@
+{
+  "name": "Phase 4",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.platforms}}",
+                    "rightValue": "slack",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "fb2fdb69-1c1e-4a05-a9ef-b3d6b223e31f"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9cabcb62-9cf7-4b8f-b7d2-76be0d1a87f6",
+                    "leftValue": "={{$json.platforms}}",
+                    "rightValue": "email",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1472,
+        96
+      ],
+      "id": "05457955-afde-4064-b21c-2a6688b61167",
+      "name": "Switch - Platform transition"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0AGCCJPPQW",
+          "mode": "list",
+          "cachedResultName": "all-socialeagle"
+        },
+        "text": "={{ $json.slack_message }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        1696,
+        48
+      ],
+      "id": "d10a56bc-9f9b-41c4-9234-217a4dedf841",
+      "name": "Send a message",
+      "webhookId": "0c71bb31-29fe-41c9-98d0-7b97b8754dee",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "qDTU6AICFACy9giQ",
+          "name": "Slack OAuth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Generating HTML').item.json.email }}",
+        "subject": "={{ $('Generating HTML').item.json.topic }} - Industry Newsletter",
+        "message": "={{ $('Generating HTML').item.json.master_newsletter_html }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        264
+      ],
+      "id": "986fe5d3-2f4b-4c57-9bd5-76cd309de516",
+      "name": "Send a message1",
+      "webhookId": "3d711330-9784-4288-8e2d-8da3ef9cbc4a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "52k7tL4g4wLI9J4m",
+          "name": "myGmail"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        576,
+        168
+      ],
+      "id": "aded09a6-cf36-4a63-b82f-202e04c5ac41",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        168
+      ],
+      "id": "b63a498e-ab49-4b9c-bb19-2753e2d7a7dc",
+      "name": "Newsletter - Generation and Sending"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.pdfshift.io/v3/convert/pdf",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "source",
+              "value": "={{ $json.html_for_pdf }}"
+            },
+            {
+              "name": "format",
+              "value": "A4"
+            },
+            {
+              "name": "use_print",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1024,
+        264
+      ],
+      "id": "cb2cee8e-8bfc-4b9d-8905-76e1b57906af",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "oSagEZAYTFHLUcQA",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1696,
+        264
+      ],
+      "id": "8c81561e-9916-4854-93ce-45c057bfd656",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a senior industry analyst and professional newsletter editor.\nYour task is to generate newsletter content for multiple platforms.\n\n═══════════════════════════════════════════\nTOPIC ENFORCEMENT\n═══════════════════════════════════════════\n\nThe newsletter topic is: {{ $json.topic }}\n\nBefore writing ANY content:\n1. Read every article provided in the input.\n2. SKIP any article that does NOT directly relate to {{ $json.topic }}.\n3. If fewer than 3 articles are relevant, use your own expert knowledge.\n   Do NOT mention that articles were missing or irrelevant.\n   Do NOT mention source availability. Write as an authoritative expert.\n\n═══════════════════════════════════════════\nOUTPUT FORMAT\n═══════════════════════════════════════════\n\nYou MUST generate TWO separate versions in ONE response.\nWrap each in a <section> tag. Do NOT write any visible labels,\nheadings, or text like \"Slack version\" or \"Email version\".\nJust output the two sections back-to-back:\n\n<section id=\"email_version\">\n...email content here...\n</section>\n<section id=\"slack_version\">\n...slack content here...\n</section>\n\n═══════════════════════════════════════════\nEMAIL VERSION RULES (inside email_version section)\n═══════════════════════════════════════════\n\nStructure — follow this order exactly:\n1. OPENING STATEMENT — Why {{ $json.topic }} matters now. 2-3 sentences.\n2. THE PROBLEM — Core challenge related to {{ $json.topic }}. 3-4 sentences.\n3. KEY INSIGHTS — 5 insights, each with a bold <h3> sub-heading\n   and 2-3 sentences of analysis. Include \"Read more\" links if articles are relevant.\n4. THE SOLUTION — 3-5 actionable recommendations.\n5. CLOSING — Forward-looking perspective + one CTA sentence.\n\nFormatting:\n- Use <h2>, <h3>, <p>, <ul>, <li>, <a>, <strong>, <em>\n- No inline styles.\n- Detailed and comprehensive.\n\n═══════════════════════════════════════════\nSLACK VERSION RULES (inside slack_version section)\n═══════════════════════════════════════════\n\nStructure — same 5 sections but SHORT:\n1. OPENING — 2 sentences max.\n2. THE PROBLEM — 2 sentences max.\n3. KEY INSIGHTS — Maximum 4 insights. Each insight: 1-2 sentences only.\n4. THE SOLUTION — 3 short bullet points max.\n5. CLOSING — 1 sentence CTA.\n\nFormatting:\n- STRICT LIMIT: Maximum 2800 characters total.\n- Use ONLY: <p>, <strong>, <br>\n- Do NOT use <h1>, <h2>, <h3>, <ul>, <li>, <section>, <a> tags.\n- Separate paragraphs with <br><br>\n- Keep it punchy and scannable.\n\n═══════════════════════════════════════════\nSTRICT RULES\n═══════════════════════════════════════════\n\n- Output valid HTML only. No markdown. No ``` blocks.\n- Do NOT include <html>, <head>, or <body> tags.\n- Do NOT write ANY text outside the <section> tags.\n- Do NOT write visible labels like \"Slack version\" or \"Email version\".\n- Do NOT mention article counts or source quality.\n- Follow language: {{ $json.language }}\n- Follow tone: {{ $json.tone }}\n- Every sentence must relate to {{ $json.topic }}.\n"
+            },
+            {
+              "content": "=Write a newsletter on: {{ $json.topic }}\nLanguage: {{ $json.language }}\nTone: {{ $json.tone }}\n\nSource articles (use ONLY if directly relevant to {{ $json.topic }}):\n{{ JSON.stringify($json.articles) }}\n\nGenerate exactly TWO sections:\n1. <section id=\"email_version\"> — full detailed newsletter\n2. <section id=\"slack_version\"> — short punchy summary (max 2800 chars)\n\nRules:\n- Follow the 5-part structure: Opening → Problem → Insights → Solution → Closing.\n- If articles are not relevant to \"{{ $json.topic }}\", ignore them and write from expertise.\n- Do NOT mention this decision. Do NOT write any text outside the section tags."
+            }
+          ]
+        },
+        "simplify": false,
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        240
+      ],
+      "id": "bba56aa5-c9f2-4309-be38-fbefbaafec19",
+      "name": "LLM - Generate Newsletter",
+      "credentials": {
+        "openAiApi": {
+          "id": "5FZahsCDkWYHxuoh",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// DYNAMIC NEWSLETTER DESIGN ENGINE v5.1\n// CHANGE LOG from v5:\n//   - Section 7: Extracts slack vs email sections from AI output\n//   - Section 9: Uses only email content for HTML template\n//   - Section 10: Output now includes slack_message field\n// Everything else is IDENTICAL to v5.\n// ============================================================\n\n// =====================================================\n// SECTION 1: UTILITY FUNCTIONS\n// =====================================================\n\nfunction hashString(str) {\n  let hash = 0;\n  for (let i = 0; i < str.length; i++) {\n    hash = ((hash << 5) - hash) + str.charCodeAt(i);\n    hash = hash & hash;\n  }\n  return Math.abs(hash);\n}\n\n// =====================================================\n// SECTION 2: IMAGE LIBRARY\n// =====================================================\n\nconst imageLibrary = {\n  sleep: [\n    \"https://images.unsplash.com/photo-1531353826977-0941b4779a1c?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1515894203077-9cd36032142f?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1540206395-68808572332f?w=680&h=300&fit=crop&q=80\",\n  ],\n  ai: [\n    \"https://images.unsplash.com/photo-1677442136019-21780ecad995?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=680&h=300&fit=crop&q=80\",\n  ],\n  technology: [\n    \"https://images.unsplash.com/photo-1518770660439-4636190af475?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=680&h=300&fit=crop&q=80\",\n  ],\n  finance: [\n    \"https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=680&h=300&fit=crop&q=80\",\n  ],\n  health: [\n    \"https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=680&h=300&fit=crop&q=80\",\n  ],\n  energy: [\n    \"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1509391366360-2e959784a276?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=680&h=300&fit=crop&q=80\",\n  ],\n  food: [\n    \"https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1493770348161-369560ae357d?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=680&h=300&fit=crop&q=80\",\n  ],\n  travel: [\n    \"https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=680&h=300&fit=crop&q=80\",\n  ],\n  sports: [\n    \"https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=680&h=300&fit=crop&q=80\",\n  ],\n  education: [\n    \"https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1509062522246-3755977927d7?w=680&h=300&fit=crop&q=80\",\n  ],\n  marketing: [\n    \"https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1557838923-2985c318be48?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=680&h=300&fit=crop&q=80\",\n  ],\n  sustainability: [\n    \"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=680&h=300&fit=crop&q=80\",\n  ],\n  realestate: [\n    \"https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=680&h=300&fit=crop&q=80\",\n  ],\n  mentalhealth: [\n    \"https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=680&h=300&fit=crop&q=80\",\n  ],\n  automotive: [\n    \"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?w=680&h=300&fit=crop&q=80\",\n  ],\n  fashion: [\n    \"https://images.unsplash.com/photo-1445205170230-053b83016050?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=680&h=300&fit=crop&q=80\",\n  ],\n  entertainment: [\n    \"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1485846234645-a62644f84728?w=680&h=300&fit=crop&q=80\",\n  ],\n  science: [\n    \"https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=680&h=300&fit=crop&q=80\",\n  ],\n  politics: [\n    \"https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1555848962-6e79363ec58f?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=680&h=300&fit=crop&q=80\",\n  ],\n  agriculture: [\n    \"https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=680&h=300&fit=crop&q=80\",\n  ],\n  default: [\n    \"https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=680&h=300&fit=crop&q=80\",\n    \"https://images.unsplash.com/photo-1553877522-43269d4ea984?w=680&h=300&fit=crop&q=80\",\n  ]\n};\n\n// =====================================================\n// SECTION 3: CATEGORY MATCHING\n// =====================================================\n\nconst categoryKeywords = {\n  sleep:          [\"sleep\", \"insomnia\", \"rest\", \"nap\", \"bedtime\", \"dream\", \"snoring\", \"fatigue\", \"tired\", \"melatonin\", \"circadian\", \"pillow\", \"mattress\", \"night owl\", \"drowsy\", \"slumber\"],\n  ai:             [\"ai\", \"artificial intelligence\", \"machine learning\", \"deep learning\", \"gpt\", \"llm\", \"claude\", \"openai\", \"neural\", \"chatbot\", \"generative\", \"nlp\", \"computer vision\", \"transformer\"],\n  technology:     [\"tech\", \"software\", \"cloud\", \"saas\", \"cyber\", \"digital\", \"computing\", \"programming\", \"code\", \"devops\", \"startup\", \"app\", \"blockchain\", \"iot\", \"5g\", \"semiconductor\", \"chip\"],\n  finance:        [\"finance\", \"fintech\", \"crypto\", \"stock\", \"banking\", \"invest\", \"trading\", \"market\", \"economy\", \"gdp\", \"inflation\", \"tax\", \"wealth\", \"budget\", \"recession\", \"interest rate\", \"wall street\", \"bitcoin\"],\n  health:         [\"health\", \"medical\", \"pharma\", \"biotech\", \"clinical\", \"hospital\", \"wellness\", \"healthcare\", \"disease\", \"vaccine\", \"therapy\", \"diagnosis\", \"patient\", \"surgery\", \"drug\", \"epidemic\", \"pandemic\"],\n  energy:         [\"energy\", \"power\", \"solar\", \"renewable\", \"oil\", \"gas\", \"nuclear\", \"grid\", \"electric\", \"battery\", \"hydrogen\", \"wind turbine\", \"fossil fuel\", \"emission\", \"coal\", \"utility\"],\n  food:           [\"food\", \"nutrition\", \"diet\", \"recipe\", \"cooking\", \"restaurant\", \"meal\", \"ingredient\", \"vegan\", \"organic\", \"protein\", \"calorie\", \"cuisine\", \"chef\", \"grocery\", \"eating\", \"weight loss\", \"obesity\"],\n  travel:         [\"travel\", \"tourism\", \"flight\", \"hotel\", \"vacation\", \"destination\", \"backpack\", \"cruise\", \"passport\", \"adventure\", \"airline\", \"resort\", \"booking\", \"itinerary\", \"beach\", \"hiking\"],\n  sports:         [\"sport\", \"fitness\", \"gym\", \"workout\", \"athlete\", \"football\", \"basketball\", \"cricket\", \"tennis\", \"running\", \"olympics\", \"yoga\", \"marathon\", \"championship\", \"league\", \"training\", \"exercise\"],\n  education:      [\"education\", \"learning\", \"university\", \"school\", \"edtech\", \"training\", \"academic\", \"student\", \"teacher\", \"curriculum\", \"scholarship\", \"exam\", \"degree\", \"campus\", \"mooc\", \"online course\"],\n  marketing:      [\"marketing\", \"advertising\", \"brand\", \"social media\", \"seo\", \"content\", \"campaign\", \"influencer\", \"engagement\", \"audience\", \"lead generation\", \"conversion\", \"email marketing\"],\n  sustainability: [\"green\", \"climate\", \"esg\", \"sustainable\", \"carbon\", \"environment\", \"eco\", \"recycle\", \"pollution\", \"deforestation\", \"biodiversity\", \"conservation\", \"net zero\", \"global warming\"],\n  realestate:     [\"real estate\", \"property\", \"housing\", \"construction\", \"building\", \"mortgage\", \"rent\", \"architecture\", \"urban\", \"zoning\", \"commercial property\", \"residential\"],\n  mentalhealth:   [\"mental health\", \"anxiety\", \"depression\", \"stress\", \"mindfulness\", \"meditation\", \"therapy\", \"counseling\", \"burnout\", \"self-care\", \"wellbeing\", \"well-being\", \"psycholog\", \"emotional\"],\n  automotive:     [\"car\", \"automotive\", \"vehicle\", \"ev\", \"electric vehicle\", \"tesla\", \"driving\", \"autonomous\", \"self-driving\", \"motor\", \"truck\", \"suv\", \"hybrid\"],\n  fashion:        [\"fashion\", \"beauty\", \"clothing\", \"apparel\", \"cosmetic\", \"skincare\", \"makeup\", \"style\", \"luxury\", \"designer\", \"trend\", \"accessory\", \"jewelry\", \"wardrobe\"],\n  entertainment:  [\"entertainment\", \"music\", \"movie\", \"film\", \"gaming\", \"concert\", \"streaming\", \"netflix\", \"spotify\", \"podcast\", \"tv show\", \"celebrity\", \"theater\", \"box office\"],\n  science:        [\"science\", \"research\", \"physics\", \"chemistry\", \"biology\", \"space\", \"nasa\", \"astronomy\", \"quantum\", \"genome\", \"experiment\", \"laboratory\", \"discovery\", \"dna\"],\n  politics:       [\"politics\", \"government\", \"election\", \"democracy\", \"policy\", \"legislation\", \"senate\", \"congress\", \"president\", \"parliament\", \"geopolitics\", \"diplomacy\", \"regulation\", \"vote\"],\n  agriculture:    [\"agriculture\", \"farming\", \"crop\", \"harvest\", \"soil\", \"irrigation\", \"livestock\", \"agritech\", \"seed\", \"fertilizer\", \"organic farming\", \"food security\"]\n};\n\nfunction matchCategory(topic) {\n  const t = (topic || \"\").toLowerCase();\n  let bestCategory = \"default\";\n  let bestScore = 0;\n  for (const [category, keywords] of Object.entries(categoryKeywords)) {\n    let score = 0;\n    for (const kw of keywords) {\n      if (t.includes(kw)) { score += kw.length; }\n    }\n    if (score > bestScore) { bestScore = score; bestCategory = category; }\n  }\n  return bestCategory;\n}\n\nfunction getHeroImage(topic) {\n  const category = matchCategory(topic);\n  const images = imageLibrary[category] || imageLibrary.default;\n  const index = hashString(topic || \"default\") % images.length;\n  return { url: images[index], alt: `${topic} — ${category} visual`, category: category };\n}\n\n// =====================================================\n// SECTION 4: COLOR THEMES\n// =====================================================\n\nconst themes = [\n  { name: \"Ocean Depth\",    primary: \"#0d47a1\", primaryLight: \"#e3f2fd\", gradient: \"#1565c0\", background: \"#e8f0fe\", heroBg: \"#1565c0\", cardColors: [\"#e3f2fd\",\"#e0f7fa\",\"#fff3e0\"], cardText: [\"#0d47a1\",\"#00695c\",\"#e65100\"] },\n  { name: \"Forest Canopy\",  primary: \"#1b5e20\", primaryLight: \"#e8f5e9\", gradient: \"#2e7d32\", background: \"#f1f8e9\", heroBg: \"#2e7d32\", cardColors: [\"#e8f5e9\",\"#f9fbe7\",\"#fff8e1\"], cardText: [\"#1b5e20\",\"#33691e\",\"#f57f17\"] },\n  { name: \"Sunset Blaze\",   primary: \"#bf360c\", primaryLight: \"#fbe9e7\", gradient: \"#d84315\", background: \"#fff3e0\", heroBg: \"#d84315\", cardColors: [\"#fbe9e7\",\"#fff3e0\",\"#fce4ec\"], cardText: [\"#bf360c\",\"#e65100\",\"#ad1457\"] },\n  { name: \"Royal Violet\",   primary: \"#4a148c\", primaryLight: \"#f3e5f5\", gradient: \"#6a1b9a\", background: \"#ede7f6\", heroBg: \"#4a148c\", cardColors: [\"#f3e5f5\",\"#ede7f6\",\"#e0f2f1\"], cardText: [\"#4a148c\",\"#283593\",\"#00695c\"] },\n  { name: \"Arctic Steel\",   primary: \"#263238\", primaryLight: \"#eceff1\", gradient: \"#455a64\", background: \"#eceff1\", heroBg: \"#37474f\", cardColors: [\"#eceff1\",\"#e0f7fa\",\"#e8eaf6\"], cardText: [\"#263238\",\"#00838f\",\"#283593\"] },\n  { name: \"Coral Reef\",     primary: \"#ad1457\", primaryLight: \"#fce4ec\", gradient: \"#c62828\", background: \"#fce4ec\", heroBg: \"#ad1457\", cardColors: [\"#fce4ec\",\"#ffebee\",\"#fff3e0\"], cardText: [\"#ad1457\",\"#c62828\",\"#e65100\"] },\n  { name: \"Golden Hour\",    primary: \"#e65100\", primaryLight: \"#fff3e0\", gradient: \"#f57f17\", background: \"#fff8e1\", heroBg: \"#e65100\", cardColors: [\"#fff3e0\",\"#fff8e1\",\"#e3f2fd\"], cardText: [\"#e65100\",\"#f57f17\",\"#1565c0\"] },\n  { name: \"Midnight Blue\",  primary: \"#1a237e\", primaryLight: \"#e3f2fd\", gradient: \"#0d47a1\", background: \"#e8eaf6\", heroBg: \"#1a237e\", cardColors: [\"#e3f2fd\",\"#e8eaf6\",\"#fffde7\"], cardText: [\"#0d47a1\",\"#1a237e\",\"#f9a825\"] },\n  { name: \"Tropical Teal\",  primary: \"#00695c\", primaryLight: \"#e0f2f1\", gradient: \"#00897b\", background: \"#e0f2f1\", heroBg: \"#00695c\", cardColors: [\"#e0f2f1\",\"#e0f7fa\",\"#fff3e0\"], cardText: [\"#00695c\",\"#00838f\",\"#e65100\"] },\n  { name: \"Slate Rose\",     primary: \"#455a64\", primaryLight: \"#eceff1\", gradient: \"#607d8b\", background: \"#f5f5f5\", heroBg: \"#455a64\", cardColors: [\"#eceff1\",\"#fce4ec\",\"#f3e5f5\"], cardText: [\"#455a64\",\"#c2185b\",\"#7b1fa2\"] },\n];\n\n// =====================================================\n// SECTION 5: INSIGHT CARD LABELS\n// =====================================================\n\nconst insightLabelsMap = {\n  sleep:          [\"😴 Sleep Quality\",    \"🧠 Brain Impact\",     \"💊 Treatment Trend\"],\n  ai:             [\"🧠 AI Advancement\",   \"⚖️ Ethics Watch\",     \"🚀 Adoption Trend\"],\n  technology:     [\"⚡ Tech Impact\",      \"🔐 Security Risk\",    \"📈 Growth Signal\"],\n  finance:        [\"💰 Market Pulse\",     \"📊 Risk Factor\",      \"🏦 Regulatory Shift\"],\n  health:         [\"🏥 Clinical Impact\",  \"🧬 Research Update\",  \"💊 Policy Change\"],\n  energy:         [\"⚡ Energy Impact\",    \"🏛️ Policy Risk\",      \"📊 Market Outlook\"],\n  food:           [\"🍎 Nutrition Shift\",  \"👨‍🍳 Industry Trend\",  \"📊 Consumer Signal\"],\n  travel:         [\"✈️ Travel Trend\",     \"🌍 Destination Watch\", \"💹 Tourism Impact\"],\n  sports:         [\"🏆 Performance\",      \"📊 League Trend\",     \"💪 Fitness Insight\"],\n  education:      [\"🎓 Learning Shift\",   \"💻 EdTech Trend\",     \"📚 Access Gap\"],\n  marketing:      [\"📣 Channel Shift\",    \"🎯 Audience Signal\",  \"💡 Creative Trend\"],\n  sustainability: [\"🌍 Climate Impact\",   \"♻️ Circular Economy\",  \"📊 ESG Metric\"],\n  realestate:     [\"🏗️ Development\",      \"📍 Location Signal\",  \"💹 Valuation Shift\"],\n  mentalhealth:   [\"🧘 Wellness Trend\",   \"🧠 Research Update\",  \"💡 Coping Strategy\"],\n  automotive:     [\"🚗 Industry Shift\",   \"⚡ EV Trend\",         \"🔧 Innovation\"],\n  fashion:        [\"👗 Style Trend\",      \"🌟 Brand Watch\",      \"📊 Market Signal\"],\n  entertainment:  [\"🎬 Content Trend\",    \"🎵 Industry Shift\",   \"📊 Audience Signal\"],\n  science:        [\"🔬 Discovery\",        \"🧪 Research Update\",  \"🌌 Frontier Watch\"],\n  politics:       [\"🏛️ Policy Shift\",     \"🗳️ Election Watch\",   \"📊 Public Signal\"],\n  agriculture:    [\"🌾 Crop Trend\",       \"🚜 AgriTech Update\",  \"📊 Market Signal\"],\n  default:        [\"💡 Key Insight\",      \"⚠️ Risk Factor\",      \"📊 Trend Signal\"],\n};\n\n// =====================================================\n// SECTION 6: DYNAMIC INSIGHT EXTRACTION FUNCTION\n// =====================================================\n\nfunction extractInsights(htmlContent, topic, labels) {\n  const defaults = [\n    { heading: labels[0], text: \"Key developments are reshaping the landscape of \" + topic + \".\" },\n    { heading: labels[1], text: \"Emerging risks require proactive monitoring and strategic response.\" },\n    { heading: labels[2], text: \"Forward-looking organizations are already adapting their approach.\" }\n  ];\n\n  try {\n    const h3Matches = htmlContent.match(/<h3[^>]*>(.*?)<\\/h3>/gi) || [];\n    const h2Matches = htmlContent.match(/<h2[^>]*>(.*?)<\\/h2>/gi) || [];\n    const strongMatches = htmlContent.match(/<strong[^>]*>(.*?)<\\/strong>/gi) || [];\n\n    let allHeadings = h3Matches.length >= 3 ? h3Matches :\n                      h2Matches.length >= 3 ? h2Matches.slice(1) :\n                      strongMatches;\n\n    const insights = [];\n    for (let i = 0; i < Math.min(3, allHeadings.length); i++) {\n      const headingText = allHeadings[i].replace(/<[^>]*>/g, \"\").trim();\n      const headingPos = htmlContent.indexOf(allHeadings[i]);\n      const afterHeading = htmlContent.substring(headingPos + allHeadings[i].length);\n      const pMatch = afterHeading.match(/<p[^>]*>(.*?)<\\/p>/i);\n      const paraText = pMatch\n        ? pMatch[1].replace(/<[^>]*>/g, \"\").trim().substring(0, 120) + (pMatch[1].length > 120 ? \"...\" : \"\")\n        : defaults[i].text;\n\n      insights.push({\n        heading: labels[i] || (\"💡 Insight \" + (i + 1)),\n        text: paraText\n      });\n    }\n\n    while (insights.length < 3) {\n      insights.push(defaults[insights.length]);\n    }\n\n    return insights;\n  } catch (e) {\n    return defaults;\n  }\n}\n\n// =====================================================\n// SECTION 6B: PLATFORM SECTION EXTRACTOR (NEW)\n// =====================================================\n\nfunction extractSection(html, sectionId) {\n  const regex = new RegExp(\n    `<section\\\\s+id=[\"']${sectionId}[\"'][^>]*>([\\\\s\\\\S]*?)<\\\\/section>`,\n    \"i\"\n  );\n  const match = html.match(regex);\n  return match ? match[1].trim() : null;\n}\n\nfunction stripHtmlToPlainText(html) {\n  // Convert <br> and </p> to newlines, then strip all tags\n  return html\n    .replace(/<br\\s*\\/?>/gi, \"\\n\")\n    .replace(/<\\/p>/gi, \"\\n\")\n    .replace(/<\\/li>/gi, \"\\n\")\n    .replace(/<li[^>]*>/gi, \"• \")\n    .replace(/<strong[^>]*>(.*?)<\\/strong>/gi, \"*$1*\")\n    .replace(/<[^>]*>/g, \"\")\n    .replace(/\\n{3,}/g, \"\\n\\n\")\n    .trim();\n}\n\n// =====================================================\n// SECTION 7: EXTRACT CONTENT — UPDATED\n// Now splits AI output into email vs slack sections\n// =====================================================\n\nconst payload = $json.data ? $json.data[0] : $json;\nconst response = payload.output;\nconst messageBlock = response.find(r => r.type === \"message\");\nconst fullAiContent = messageBlock?.content?.find(c => c.type === \"output_text\")?.text || \"\";\n\n// Extract platform-specific sections\nconst emailSectionContent = extractSection(fullAiContent, \"email_version\");\nconst slackSectionContent = extractSection(fullAiContent, \"slack_version\");\n\n// For the email HTML template, use only the email section\n// If no sections found, use full content (backward compatible)\nconst aiContent = emailSectionContent || fullAiContent.replace(/<section[^>]*>|<\\/section>/gi, \"\").trim();\n\n// For Slack, convert to plain text (Slack doesn't render HTML well)\nlet slackMessage = \"\";\nif (slackSectionContent) {\n  slackMessage = stripHtmlToPlainText(slackSectionContent);\n} else {\n  // Fallback: create a short summary from the email content\n  const plainFull = stripHtmlToPlainText(aiContent);\n  slackMessage = plainFull.substring(0, 2800);\n}\n\n// =====================================================\n// SECTION 8: SELECT THEME + IMAGE + LABELS + INSIGHTS\n// =====================================================\n\nconst topicHash = hashString(payload.topic || \"default\");\nconst theme = themes[topicHash % themes.length];\nconst hero = getHeroImage(payload.topic || \"\");\nconst labels = insightLabelsMap[hero.category] || insightLabelsMap.default;\nconst insights = extractInsights(aiContent, payload.topic, labels);\n\n// =====================================================\n// SECTION 9: HTML EMAIL TEMPLATE (uses aiContent = email section only)\n// =====================================================\n\nconst styledEmail = `<!DOCTYPE html>\n<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n<!--[if mso]>\n<noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>\n<![endif]-->\n<title>${payload.topic}</title>\n</head>\n<body style=\"margin:0;padding:0;background-color:${theme.background};font-family:'Segoe UI',Tahoma,Verdana,Arial,sans-serif;\">\n\n<!--[if mso]><table role=\"presentation\" width=\"680\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td><![endif]-->\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr><td align=\"center\" style=\"padding:40px 10px;\">\n\n<table role=\"presentation\" width=\"680\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"max-width:680px;width:100%;background-color:#ffffff;\">\n\n<!-- HEADER -->\n<tr>\n<td align=\"center\" style=\"background-color:${theme.gradient};padding:50px 40px;\">\n<h1 style=\"margin:0;font-size:34px;font-weight:800;color:#ffffff;font-family:'Segoe UI',Tahoma,Verdana,Arial,sans-serif;\">${payload.topic}</h1>\n<p style=\"margin:12px 0 0;font-size:13px;color:#ffffff;letter-spacing:3px;text-transform:uppercase;opacity:0.85;\">Industry Intelligence Brief</p>\n<!--[if mso]><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin-top:16px;\"><tr><td style=\"width:60px;height:3px;background-color:#ffffff;\" width=\"60\" height=\"3\"></td></tr></table><![endif]-->\n<!--[if !mso]><!--><div style=\"margin-top:16px;width:60px;height:3px;background-color:rgba(255,255,255,0.5);display:inline-block;\"></div><!--<![endif]-->\n</td>\n</tr>\n\n<!-- HERO IMAGE -->\n<tr>\n<td align=\"center\" valign=\"middle\" style=\"background-color:${theme.heroBg};font-size:0;line-height:0;\">\n<!--[if mso]><table role=\"presentation\" width=\"680\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"background-color:${theme.heroBg};\"><![endif]-->\n<img src=\"${hero.url}\" alt=\"${hero.alt}\" width=\"680\" height=\"300\" style=\"display:block;width:100%;max-width:680px;height:auto;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;color:#ffffff;font-size:16px;font-family:Arial,sans-serif;background-color:${theme.heroBg};\">\n<!--[if mso]></td></tr></table><![endif]-->\n</td>\n</tr>\n\n<!-- EXECUTIVE SNAPSHOT (DYNAMIC) -->\n<tr>\n<td style=\"background-color:${theme.primaryLight};padding:24px 40px;border-left:6px solid ${theme.primary};\">\n<p style=\"margin:0;font-size:15px;color:#333;line-height:1.6;\"><strong style=\"color:${theme.primary};\">Executive Snapshot:</strong> This edition covers the latest developments, challenges, and opportunities in ${payload.topic}.</p>\n</td>\n</tr>\n\n<!-- MAIN CONTENT -->\n<tr>\n<td style=\"padding:40px 44px 28px;font-size:16px;line-height:1.85;color:#333333;\">${aiContent}</td>\n</tr>\n\n<!-- INSIGHT CARDS (DYNAMIC) -->\n<tr>\n<td style=\"padding:8px 24px 36px;\">\n<!--[if mso]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"8\" border=\"0\"><tr><![endif]-->\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"8\" border=\"0\"><tr>\n\n<td width=\"33%\" valign=\"top\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr><td style=\"height:4px;background-color:${theme.cardText[0]};font-size:1px;line-height:1px;\">&nbsp;</td></tr>\n<tr><td style=\"background-color:${theme.cardColors[0]};padding:18px;\">\n<p style=\"margin:0 0 6px;font-size:15px;font-weight:700;color:${theme.cardText[0]};\">${insights[0].heading}</p>\n<p style=\"margin:0;font-size:13px;color:#444;line-height:1.5;\">${insights[0].text}</p>\n</td></tr></table>\n</td>\n\n<td width=\"33%\" valign=\"top\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr><td style=\"height:4px;background-color:${theme.cardText[1]};font-size:1px;line-height:1px;\">&nbsp;</td></tr>\n<tr><td style=\"background-color:${theme.cardColors[1]};padding:18px;\">\n<p style=\"margin:0 0 6px;font-size:15px;font-weight:700;color:${theme.cardText[1]};\">${insights[1].heading}</p>\n<p style=\"margin:0;font-size:13px;color:#444;line-height:1.5;\">${insights[1].text}</p>\n</td></tr></table>\n</td>\n\n<td width=\"33%\" valign=\"top\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr><td style=\"height:4px;background-color:${theme.cardText[2]};font-size:1px;line-height:1px;\">&nbsp;</td></tr>\n<tr><td style=\"background-color:${theme.cardColors[2]};padding:18px;\">\n<p style=\"margin:0 0 6px;font-size:15px;font-weight:700;color:${theme.cardText[2]};\">${insights[2].heading}</p>\n<p style=\"margin:0;font-size:13px;color:#444;line-height:1.5;\">${insights[2].text}</p>\n</td></tr></table>\n</td>\n\n</tr></table>\n<!--[if mso]></tr></table><![endif]-->\n</td>\n</tr>\n\n<!-- INDUSTRY OUTLOOK (DYNAMIC) -->\n<tr>\n<td style=\"background-color:${theme.gradient};color:#ffffff;padding:42px 40px;\">\n<h2 style=\"margin:0 0 10px;font-size:22px;font-weight:700;color:#ffffff;\">Industry Outlook</h2>\n<p style=\"margin:0;font-size:15px;line-height:1.75;color:#ffffff;opacity:0.95;\">As ${payload.topic} continues to evolve, organizations that invest in <strong>strategic adaptation</strong>, <strong>continuous learning</strong>, and <strong>proactive planning</strong> will be best positioned to lead in this space.</p>\n</td>\n</tr>\n\n<!-- CTA -->\n<tr>\n<td align=\"center\" style=\"padding:42px 40px;\">\n<!--[if mso]><v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" href=\"#\" style=\"height:48px;v-text-anchor:middle;width:280px;\" arcsize=\"50%\" fillcolor=\"${theme.primary}\"><w:anchorlock/><center style=\"color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;font-size:15px;font-weight:bold;\">View Full Analysis →</center></v:roundrect><![endif]-->\n<!--[if !mso]><!--><a href=\"#\" style=\"background-color:${theme.primary};color:#ffffff;padding:15px 36px;text-decoration:none;border-radius:28px;font-weight:700;font-size:15px;display:inline-block;mso-hide:all;\">View Full Analysis →</a><!--<![endif]-->\n</td>\n</tr>\n\n<!-- FOOTER -->\n<tr>\n<td style=\"background-color:${theme.primaryLight};padding:26px;text-align:center;\">\n<p style=\"margin:0 0 4px;font-size:12px;color:#777;\">© 2026 Social Eagle • AI Industry Intelligence</p>\n<p style=\"margin:0;font-size:11px;color:#999;\">Crafted with <span style=\"color:${theme.primary};\">■</span> ${theme.name} theme</p>\n</td>\n</tr>\n\n</table>\n</td></tr></table>\n<!--[if mso]></td></tr></table><![endif]-->\n</body>\n</html>`;\n\n// =====================================================\n// SECTION 10: OUTPUT — UPDATED\n// Now includes slack_message for your Slack node\n// =====================================================\n\nreturn [\n  {\n    json: {\n      topic: payload.topic,\n      platforms: payload.platforms,\n      email: payload.email,\n      master_newsletter_html: styledEmail,\n      slack_message: slackMessage,\n      html_for_pdf: styledEmail,\n      pdf_filename: (\"newsletter-\" + (payload.topic || \"newsletter\").replace(/\\s+/g, \"-\").toLowerCase() + \"-\" + new Date().toISOString().split(\"T\")[0] + \".pdf\").trim()\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        168
+      ],
+      "id": "8fc8626c-fa33-4cef-8404-eef95fea02aa",
+      "name": "Generating HTML"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "platforms",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        96
+      ],
+      "id": "42ebfe7f-18d4-46d6-8ca8-2c4dbd15b148",
+      "name": "Platform Categorization"
+    },
+    {
+      "parameters": {
+        "content": "## Sub-Workflow 2 — Newsletter Generation & Sending\n\n * Takes filtered articles + topic from Phase 2.\n * AI generates platform-specific content (email + Slack versions).\n * JavaScript applies dynamic theming & design.\n * PDFShift converts HTML → PDF attachment.\n * Switch routes to correct platform:\n       - Slack → post message in slack channel\n       - Email → Gmail with PDF attachment",
+        "height": 320,
+        "width": 672,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        192,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "91f9ab4a-e32a-4c44-95ff-04986986d26e",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Switch - Platform transition": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Generating HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Newsletter - Generation and Sending": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "LLM - Generate Newsletter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Platform Categorization",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        []
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM - Generate Newsletter": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Generating HTML": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Platform Categorization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Platform Categorization": {
+      "main": [
+        [
+          {
+            "node": "Switch - Platform transition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "700f4e4a-1fee-4f01-90e5-0ed332959286",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2cca1bda785fe265cf4a5387ece9cc34e6ac47f8a1c228e1c2c08c333216aa4a"
+  },
+  "id": "kKG6QvmRV9f6AauB",
+  "tags": []
+}
