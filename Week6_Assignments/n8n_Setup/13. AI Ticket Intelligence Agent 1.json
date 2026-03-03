@@ -1,0 +1,570 @@
+{
+  "name": "13. AI Ticket Intelligence Agent 1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "analyze-ticket",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        640,
+        48
+      ],
+      "id": "125c0e56-9cba-436b-b937-ed1ad05bc32d",
+      "name": "Webhook",
+      "webhookId": "4c19a825-7df5-4ebb-908f-c5195fb134e0"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Analyze this incoming Power & Gas operations ticket:\n\n{{ $('Getting Embeddings').first().json.body ? 'Customer ID: ' + $('Getting Embeddings').first().json.body.customer_id + '\\nTitle: ' + $('Getting Embeddings').first().json.body.title + '\\nDescription: ' + $('Getting Embeddings').first().json.body.description + '\\nRegion: ' + $('Getting Embeddings').first().json.body.region + '\\nAsset Type: ' + $('Getting Embeddings').first().json.body.asset_type : 'No ticket data' }}\n\nHere are the most similar historical tickets found in our vector database:\n{{ JSON.stringify($json.matches, null, 2) }}\n\nNow perform a COMPLETE analysis using ALL your MCP tools:\n1. Call classify_severity with the ticket category, asset_type, and description\n2. Call calculate_sla with the severity result, category, and region\n3. Call route_escalation with the severity, category, asset_type, and region\n4. Call check_regulatory_compliance with the category, severity, description, asset_type, and region\n5. Send team notification via Gmail with the analysis results\n6. Log the ticket to Google Sheets with all analysis data\n\nAfter using ALL tools, respond with ONLY the final JSON object.",
+        "options": {
+          "systemMessage": "You are an AI Ticket Intelligence Agent for Power & Gas Operations using MCP (Model Context Protocol) with multiple specialized tools.\n\nWORKFLOW: For EVERY ticket you MUST call ALL tools in this order:\n1. classify_severity - Input: {\"category\": \"...\", \"asset_type\": \"...\", \"description\": \"...\"}\n2. calculate_sla - Input: {\"severity\": \"L1/L2/L3\", \"category\": \"...\", \"region\": \"...\"}\n3. route_escalation - Input: {\"severity\": \"L1/L2/L3\", \"category\": \"...\", \"asset_type\": \"...\", \"region\": \"...\"}\n4. check_regulatory_compliance - Input: {\"category\": \"...\", \"severity\": \"L1/L2/L3\", \"description\": \"...\", \"asset_type\": \"...\", \"region\": \"...\"}\n5. get_current_timestamp - No input needed. Returns current system time.\n6. Send Team Notification (Gmail) - Send a professional HTML email to manjupriyaar.learning@gmail.com. Subject must include severity level emoji (🟢L1/🟡L2/🔴L3) and ticket title. Email body must be professional HTML with: a header section with \"PowerGrid AI - Ticket Alert\", ticket details (Customer ID, Title, Region, Asset Type), AI Analysis section (Root Cause, Severity with color, Resolution Steps as numbered list, Recommended Team, SLA Deadline), a \"Required Action\" box asking the team to validate the AI analysis, and a footer with \"Powered by PowerGrid AI Ticket Intelligence Agent\"\n7. Append row in Google Sheets - Send ONLY these 11 fields: Timestamp (from get_current_timestamp result), Customer_ID (copy the EXACT customer_id value shown in the ticket data above, for example \"C-9843\"), Title (copy the EXACT full title shown in the ticket data above, for example \"Gas meter not updating usage after firmware upgrade\"), Severity, Category, Root_Cause, Team, Confidence, SLA_Hours, Region (copy the EXACT region shown in the ticket data above, for example \"North Texas\"), Status (\"Open - Pending Validation\"). You MUST copy these values exactly as they appear in the ticket - do not leave them blank or use placeholders.\n\nSeverity Rules:\n- L1: Known issue, documented fix, no config change\n- L2: Needs logs review, configuration analysis, not documented\n- L3: Firmware/code bug, safety critical, regulatory impact, engineering patch needed\n\nUse the similar historical tickets AND tool results to determine your analysis. For the category field, extract it from the most similar historical ticket's metadata if available. Common categories include: Firmware Bug, Gas Leak, Pipeline Integrity, SCADA Failure, Meter Configuration, Billing Error, Cybersecurity Incident, Grid Instability, Safety Sensor, Transformer Issue. Choose the most specific category that matches.\n\nRESPONSE FORMAT - Reply with ONLY this JSON object, nothing else:\n{\"suggested_root_cause\": \"detailed root cause\", \"resolution_steps\": [\"step 1\", \"step 2\", \"step 3\"], \"severity\": \"L1\", \"severity_reason\": \"explanation\", \"confidence_score\": 85, \"estimated_resolution_hours\": 24, \"similar_tickets\": [{\"ticket_id\": \"TKT-XXXX\", \"title\": \"...\", \"similarity\": \"High\"}], \"category\": \"Firmware Bug\", \"risk_assessment\": \"risk details\", \"recommended_team\": \"Engineering\", \"sla_deadline\": \"4 hours\", \"compliance_status\": \"COMPLIANT\", \"regulatory_flags\": [], \"escalation_path\": [\"L1: Support\", \"L2: Senior\", \"L3: Director\"], \"kb_article_id\": \"KB-123456\", \"notification_sent\": true}\n\nCRITICAL RULES:\n- ALWAYS call ALL 7 tools before responding\n- ONLY output raw JSON starting with { ending with }\n- NO markdown, NO code blocks, NO explanations\n- Never say you need more information - analyze with what you have\n- NEVER use placeholder values for Customer_ID or Region - use the EXACT values from the ticket"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1312,
+        48
+      ],
+      "id": "0f900531-b700-4cec-ba8d-d064a78ae228",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1312,
+        272
+      ],
+      "id": "7b4c0aa4-f413-4205-bf0b-614e3d4a4d3f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "5FZahsCDkWYHxuoh",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1664,
+        48
+      ],
+      "id": "6775885a-c990-42c4-ba17-f66fb0212cca",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/embeddings",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"text-embedding-3-small\",\n  \"input\": \"{{ $json.body.title }} {{ $json.body.description }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        864,
+        48
+      ],
+      "id": "b29b68a0-8c91-4663-be00-b4ecc77b510c",
+      "name": "Getting Embedings",
+      "credentials": {
+        "openAiApi": {
+          "id": "5FZahsCDkWYHxuoh",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://power-gas-tickets-po72hpo.svc.aped-4627-b74a.pinecone.io/query",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"vector\": {{ JSON.stringify($json.data[0].embedding) }},\n  \"topK\": 5,\n  \"includeMetadata\": true\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1088,
+        48
+      ],
+      "id": "2b9a8cd1-fc3c-433e-8f39-afaa3655cebf",
+      "name": "Query Pinecone",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "oSagEZAYTFHLUcQA",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to calculate SLA deadlines and estimated resolution time for a ticket. Input should be a JSON string with fields: severity (L1/L2/L3), category, region. Returns SLA hours, priority, and escalation timeline.",
+        "jsCode": "const input = JSON.parse(query);\nconst severity = input.severity || 'L2';\nconst category = (input.category || '').toLowerCase();\nconst region = (input.region || '').toLowerCase();\n\nlet sla_hours = 24;\nlet priority = 'Medium';\nlet escalation_timeline = '';\nlet response_time = '';\n\nif (severity === 'L1') {\n  sla_hours = 8;\n  priority = 'Standard';\n  response_time = '2 hours';\n  escalation_timeline = 'Auto-close if no response in 48 hours';\n} else if (severity === 'L2') {\n  sla_hours = 24;\n  priority = 'High';\n  response_time = '1 hour';\n  escalation_timeline = 'Escalate to senior tech after 12 hours, manager after 24 hours';\n} else if (severity === 'L3') {\n  sla_hours = 4;\n  priority = 'Critical';\n  response_time = '15 minutes';\n  escalation_timeline = 'Immediate engineering escalation, management notified within 1 hour, executive briefing if unresolved in 4 hours';\n}\n\n// Adjust for safety-critical categories\nif (category.includes('gas leak') || category.includes('safety')) {\n  sla_hours = 1;\n  priority = 'Emergency';\n  response_time = 'Immediate';\n  escalation_timeline = 'Emergency response team dispatched immediately. Regulatory notification within 30 minutes.';\n}\n\nreturn JSON.stringify({\n  sla_hours: sla_hours,\n  priority: priority,\n  response_time: response_time,\n  escalation_timeline: escalation_timeline,\n  target_resolution: sla_hours + ' hours',\n  region: region\n});"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        -176
+      ],
+      "id": "eed80404-7db7-4112-b91d-59a736f58111",
+      "name": "calculate_sla"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to classify the severity of a Power & Gas ticket. Input should be a JSON string with fields: category, asset_type, description. Returns severity level L1, L2, or L3 with reasoning.",
+        "jsCode": "const input = JSON.parse(query);\nconst category = (input.category || '').toLowerCase();\nconst asset_type = (input.asset_type || '').toLowerCase();\nconst description = (input.description || '').toLowerCase();\n\nlet severity = 'L2';\nlet reason = '';\n\n// L3 - Critical\nif (description.includes('gas leak') || description.includes('safety') || \n    description.includes('explosion') || description.includes('regulatory') ||\n    description.includes('firmware bug') || description.includes('cybersecurity') ||\n    category.includes('gas leak') || category.includes('safety') ||\n    category.includes('cybersecurity') || category.includes('pipeline integrity')) {\n  severity = 'L3';\n  reason = 'Safety-critical or engineering-level issue requiring immediate escalation';\n}\n// L1 - Simple\nelse if (description.includes('billing') || description.includes('configuration') ||\n         description.includes('reset') || description.includes('reboot') ||\n         description.includes('password') || category.includes('billing') ||\n         category.includes('meter configuration')) {\n  severity = 'L1';\n  reason = 'Known issue with documented resolution, standard operational fix';\n}\n// L2 - Default\nelse {\n  severity = 'L2';\n  reason = 'Requires technical investigation, logs review, or configuration analysis';\n}\n\nreturn JSON.stringify({\n  severity: severity,\n  reason: reason,\n  category: category,\n  asset_type: asset_type\n});"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        -176
+      ],
+      "id": "a7bdf986-63e0-451b-bc00-3a066a0e40f5",
+      "name": "classify_severity"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to determine the correct team and escalation path for a ticket. Input should be a JSON string with fields: severity (L1/L2/L3), category, asset_type, region. Returns recommended team, escalation contacts, and routing instructions.",
+        "jsCode": "const input = JSON.parse(query);\nconst severity = input.severity || 'L2';\nconst category = (input.category || '').toLowerCase();\nconst asset_type = (input.asset_type || '').toLowerCase();\nconst region = (input.region || '').toLowerCase();\n\nlet team = 'Field Operations';\nlet escalation_path = [];\nlet routing_notes = '';\n\n// Route based on category\nif (category.includes('firmware') || category.includes('scada')) {\n  team = 'Engineering';\n  escalation_path = ['L1: Engineering Support', 'L2: Senior Engineer', 'L3: Engineering Director'];\n  routing_notes = 'Requires engineering analysis and potential code fix';\n} else if (category.includes('billing') || category.includes('meter configuration')) {\n  team = 'Billing & Metering';\n  escalation_path = ['L1: Billing Support', 'L2: Billing Supervisor', 'L3: Revenue Assurance Manager'];\n  routing_notes = 'Standard billing/metering issue, check configuration first';\n} else if (category.includes('cybersecurity') || category.includes('it infrastructure')) {\n  team = 'IT Security';\n  escalation_path = ['L1: IT Help Desk', 'L2: Security Analyst', 'L3: CISO'];\n  routing_notes = 'Security protocol required, isolate affected systems';\n} else if (category.includes('gas leak') || category.includes('safety') || category.includes('pipeline')) {\n  team = 'Safety & Emergency Response';\n  escalation_path = ['Immediate: Emergency Response Team', 'Concurrent: Safety Director', 'Regulatory: Compliance Officer'];\n  routing_notes = 'EMERGENCY: Follow safety protocol SOP-001. Notify regulatory if required.';\n} else if (category.includes('grid') || category.includes('transformer')) {\n  team = 'Grid Operations';\n  escalation_path = ['L1: Grid Operator', 'L2: Grid Engineer', 'L3: Grid Operations Director'];\n  routing_notes = 'Monitor grid stability, check SCADA readings';\n} else {\n  team = 'Field Operations';\n  escalation_path = ['L1: Field Technician', 'L2: Field Supervisor', 'L3: Operations Manager'];\n  routing_notes = 'Dispatch field team for on-site investigation';\n}\n\nreturn JSON.stringify({\n  recommended_team: team,\n  escalation_path: escalation_path,\n  routing_notes: routing_notes,\n  region_dispatch: region,\n  severity_level: severity\n});"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        464,
+        -176
+      ],
+      "id": "4cbd7a62-764b-4d67-a822-7a177f5581c8",
+      "name": "route_escalation"
+    },
+    {
+      "parameters": {
+        "sendTo": "manjupriyaar.learning@gmail.com",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        -176
+      ],
+      "id": "1969629a-8bad-4341-8bc4-50c14064698f",
+      "name": "Send Team Notification ",
+      "webhookId": "2a9721ec-cdb3-462e-be3e-b3f7570af8ca",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "52k7tL4g4wLI9J4m",
+          "name": "myGmail"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to check if a ticket has regulatory or compliance implications. Input should be a JSON string with fields: category, severity, description, asset_type, region. Returns compliance flags and required regulatory actions.",
+        "jsCode": "const input = JSON.parse(query);\nconst category = (input.category || '').toLowerCase();\nconst description = (input.description || '').toLowerCase();\nconst asset_type = (input.asset_type || '').toLowerCase();\nconst severity = input.severity || 'L2';\n\nlet compliance_flags = [];\nlet regulatory_actions = [];\nlet requires_notification = false;\nlet regulatory_body = '';\n\nif (category.includes('gas leak') || description.includes('gas leak')) {\n  compliance_flags.push('PHMSA Pipeline Safety Regulation');\n  regulatory_actions.push('File incident report within 24 hours');\n  regulatory_actions.push('Notify state pipeline safety office');\n  requires_notification = true;\n  regulatory_body = 'PHMSA (Pipeline and Hazardous Materials Safety Administration)';\n}\n\nif (category.includes('safety') || description.includes('explosion') || description.includes('injury')) {\n  compliance_flags.push('OSHA Workplace Safety');\n  regulatory_actions.push('Complete OSHA Form 301 if injury involved');\n  requires_notification = true;\n  regulatory_body = regulatory_body ? regulatory_body + ', OSHA' : 'OSHA';\n}\n\nif (description.includes('cybersecurity') || category.includes('cybersecurity')) {\n  compliance_flags.push('NERC CIP Cybersecurity Standards');\n  regulatory_actions.push('Report to NERC ES-ISAC within 1 hour');\n  regulatory_actions.push('Initiate incident response plan IRP-001');\n  requires_notification = true;\n  regulatory_body = regulatory_body ? regulatory_body + ', NERC' : 'NERC';\n}\n\nif (category.includes('billing') || description.includes('overcharg')) {\n  compliance_flags.push('PUC Consumer Protection Rules');\n  regulatory_actions.push('Document billing discrepancy for PUC audit trail');\n  regulatory_body = regulatory_body ? regulatory_body + ', PUC' : 'PUC (Public Utility Commission)';\n}\n\nif (asset_type.includes('meter') && (description.includes('accuracy') || description.includes('wrong reading'))) {\n  compliance_flags.push('ANSI C12 Metering Standards');\n  regulatory_actions.push('Schedule meter accuracy test per ANSI C12.20');\n}\n\nif (compliance_flags.length === 0) {\n  compliance_flags.push('No immediate regulatory concerns');\n  regulatory_actions.push('Standard operational procedures apply');\n}\n\nreturn JSON.stringify({\n  compliance_flags: compliance_flags,\n  regulatory_actions: regulatory_actions,\n  requires_regulatory_notification: requires_notification,\n  regulatory_body: regulatory_body || 'None',\n  compliance_status: requires_notification ? 'ACTION REQUIRED' : 'COMPLIANT',\n  review_deadline: requires_notification ? '24 hours' : 'Standard review cycle'\n});"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        272,
+        -176
+      ],
+      "id": "0fcec735-d287-46c9-8fac-f5b009cb12af",
+      "name": "check_regulatory_compliance"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool to log a ticket to the tracking spreadsheet. Input must be a JSON object with ONLY these fields: Timestamp (ISO date string), Customer_ID (string), Title (string), Severity (L1/L2/L3), Category (string), Root_Cause (short string), Team (string), Confidence (number), SLA_Hours (number), Region (string), Status (string like \"Open\"). Do NOT include matches, results, namespace, usage, toolCallId, or any other fields.",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1sBTxIRxVN7YiZMLTAf5O7y0i06OugF5ZgHFOQ-8HTNk",
+          "mode": "list",
+          "cachedResultName": "PowerGrid AI - Ticket Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sBTxIRxVN7YiZMLTAf5O7y0i06OugF5ZgHFOQ-8HTNk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sBTxIRxVN7YiZMLTAf5O7y0i06OugF5ZgHFOQ-8HTNk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Timestamp', ``, 'string') }}",
+            "Title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+            "Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Status', ``, 'string') }}",
+            "Region": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Region', ``, 'string') }}",
+            "Confidence": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Confidence', ``, 'string') }}",
+            "Team": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Team', ``, 'string') }}",
+            "Severity": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Severity', ``, 'string') }}",
+            "Category": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Category', ``, 'string') }}",
+            "Customer_ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Customer_ID', ``, 'string') }}",
+            "Root_Cause": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Root_Cause', ``, 'string') }}",
+            "SLA_Hours": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('SLA_Hours', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Customer_ID",
+              "displayName": "Customer_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Severity",
+              "displayName": "Severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Root_Cause",
+              "displayName": "Root_Cause",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Team",
+              "displayName": "Team",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "SLA_Hours",
+              "displayName": "SLA_Hours",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Region",
+              "displayName": "Region",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        1376,
+        -176
+      ],
+      "id": "325598fe-f8b0-4dde-9cf5-bfa6fe6ef7f6",
+      "name": "Logs",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1RZNH6wjexYvOlPM",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to get the current system timestamp. No input needed. Returns the current date and time in ISO format.",
+        "jsCode": "return new Date().toISOString();"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        1200,
+        -176
+      ],
+      "id": "0a2a64c5-7949-42f1-9055-70958b0bf12a",
+      "name": "get_current_timestamp"
+    },
+    {
+      "parameters": {
+        "path": "ai-ticket-mcp"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        848,
+        -400
+      ],
+      "id": "dc04127a-e3d9-4d3b-b7fb-a4fb53a9f536",
+      "name": "MCP Server Trigger",
+      "webhookId": "75802868-e1f5-48bb-8552-4c51bcd25f2f"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://n8n.srv1397028.hstgr.cloud/mcp/ai-ticket-mcp",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        1456,
+        272
+      ],
+      "id": "3f6e9a04-ff08-4d2e-96de-336bb12852b6",
+      "name": "MCP Client"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Getting Embedings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Getting Embedings": {
+      "main": [
+        [
+          {
+            "node": "Query Pinecone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Pinecone": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calculate_sla": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "classify_severity": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "route_escalation": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Team Notification ": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check_regulatory_compliance": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Logs": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_current_timestamp": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b731e913-1c03-4590-acec-eace3d3701e7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2cca1bda785fe265cf4a5387ece9cc34e6ac47f8a1c228e1c2c08c333216aa4a"
+  },
+  "id": "oye0Ghm15E99POZE",
+  "tags": []
+}
